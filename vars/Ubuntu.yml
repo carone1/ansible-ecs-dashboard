@@ -1,2 +1,4 @@
 ---
 # vars file for vault (Ubuntu specific)
+#
+java: "{% if custom_java is defined %}{{custom_java}}{% else %}openjdk-8-jre-headless{% endif %}"

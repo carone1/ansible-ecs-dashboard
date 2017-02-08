@@ -14,4 +14,4 @@ ecs_dashboard_config_dir: /etc/ecs-dashboard
 ecs_dashboard_user: ecs-dashboard
 ecs_dashboard_group: ecs-dashboard
 
-
+update_java: true

@@ -37,6 +37,11 @@
   tags:
     - ecs-dashboard
 
+- name: Install Java
+  include: installJava.yml
+  tags:
+    - ecs-dashboard
+
 - name: Install Dashboard MetaData Collector
   include: installCollector.yml
   tags:
