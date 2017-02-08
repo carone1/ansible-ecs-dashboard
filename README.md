@@ -1,2 +1,2 @@
 
-Ansible Playbbok to install ECS Dashboard Solution.
+Ansible Playbook to install ECS Dashboard Solution.
