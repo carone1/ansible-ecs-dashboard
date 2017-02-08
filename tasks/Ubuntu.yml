@@ -1,0 +1,11 @@
+---
+# tasks file for ecs-dashbaord (Ubuntu specific)
+
+- name: Install libcap2-bin
+  become: yes
+  apt:
+    name: libcap2-bin
+    update_cache: yes
+    state: latest
+  tags:
+    - ecs-dashboard

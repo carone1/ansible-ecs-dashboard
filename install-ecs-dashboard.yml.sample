@@ -1,0 +1,3 @@
+- hosts: ecs_dashboard
+  roles:
+    - ecs_dashboard

@@ -1,0 +1,43 @@
+---
+# tasks file for vault
+
+- name: Include distribution specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
+  tags:
+    - ecs-dashboard
+
+- include: CentOS.yml
+  when: ansible_distribution == "CentOS"
+  tags:
+    - ecs-dashboard
+
+- include: Ubuntu.yml
+  when: ansible_distribution == "Ubuntu"
+  tags:
+    - ecs-dashboard 
+
+- name: Create ECS Dashboard group
+  become: yes
+  group:
+    name: "{{ ecs_dashboard_group }}"
+    system: yes
+    state: present
+  tags:
+    - ecs-dashboard
+
+- name: Create ECS Dashboard user
+  become: yes
+  user:
+    name: "{{ ecs_dashboard_user }}"
+    shell: /bin/false
+    createhome: no
+    group: "{{ ecs_dashboard_group }}"
+    system: yes
+    state: present
+  tags:
+    - ecs-dashboard
+
+- name: Install Dashboard MetaData Collector
+  include: installCollector.yml
+  tags:
+    - ecs-dashboard

@@ -1,2 +1,2 @@
-# ansible-ecs-dashboard
-Ansible playbookto install ecs-dashbaord solution
+
+Ansible Playbbok to install ECS Dashboard Solution.

@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  author: Eric Caron
+  description: Installs and configures ECs Dashboard Solution 
+  company:
+  license: MIT
+  min_ansible_version: 1.9
+  github_branch: master
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
+  galaxy_tags:
+    - system
+#dependencies:
+#  - unzip
+#dependencies:
+#   - { role: '../roles/unzip'  }

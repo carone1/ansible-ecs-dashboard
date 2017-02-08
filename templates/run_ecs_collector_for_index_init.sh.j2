@@ -1,0 +1,5 @@
+
+#!/bin/bash
+
+
+{{ ecs_dashboard_install_dir }}/ecs-metadata-collector-{{ ecs_dashboard_bin_version }}/bin/ecs-metadata-collector --elastic-hosts {{ elastic_hosts }} --elastic-port {{ elastic_port }} --elastic-cluster {{ elastic_cluster_name }} --init-indexes-only 

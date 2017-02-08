@@ -1,0 +1,24 @@
+---
+# handlers file for vault
+
+- name: reload systemd
+  become: yes
+  command: systemctl daemon-reload
+  tags:
+    - hashi-vault
+
+- name: restart vault
+  become: yes
+  service:
+    name: "{{ vault_service_name }}"
+    state: restarted
+  tags:
+    - hashi-vault
+
+- name: reload vault
+  become: yes
+  service:
+    name: "{{ vault_service_name }}"
+    state: reloaded
+  tags:
+    - hashi-vault
