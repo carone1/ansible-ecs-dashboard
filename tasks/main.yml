@@ -42,6 +42,16 @@
   tags:
     - ecs-dashboard
 
+- name: Find best JRE
+  include: setJavaHome.yml
+  tags:
+    - ecs-dashboard
+
+- name: Install ECS Management SSL Certificate
+  include: installMgmtEcsCertificate.yml
+  tags:
+    - ecs-dashboard
+
 - name: Install Dashboard MetaData Collector
   include: installCollector.yml
   tags:

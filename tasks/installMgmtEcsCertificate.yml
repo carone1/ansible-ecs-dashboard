@@ -1,0 +1,25 @@
+---
+
+- name: Download ECS Management SSL Certificat
+  become: yes
+  shell: "echo -n | openssl s_client -connect {{ ecs_hosts }}:4443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/ecs-mgmt.crt"
+  register: certificate_download
+
+- name: Check if ECS Management SSL Certificate is already present
+  become: yes
+  shell: "{{ java_home }}/bin/keytool -list -keystore {{ java_home }}/lib/security/cacerts -storepass changeit -alias ecs-mgmt"
+  register: certificate_installed
+  failed_when: no
+
+- name: Remove already installed ECS Management SSL Certificate
+  become: yes
+  shell: "{{ java_home }}/bin/keytool -delete -keystore {{ java_home }}/lib/security/cacerts -storepass changeit -alias ecs-mgmt"
+  register: certificate_removed
+  when: ( certificate_installed.rc == 0 )
+  #failed_when: no
+
+
+- name: Install Downloaded ECS Management SSL Certificate
+  become: yes
+  shell: "{{ java_home }}/bin/keytool -importcert  -keystore {{ java_home }}/lib/security/cacerts -storepass changeit -file /tmp/ecs-mgmt.crt -alias ecs-mgmt -noprompt"
+  when: ( (certificate_installed.rc != 0) or (certificate_removed.rc == 0))

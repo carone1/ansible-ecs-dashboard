@@ -1,0 +1,11 @@
+---
+
+- name: search for best installed JRE
+  become: yes 
+  shell: "update-alternatives --display java | grep best | sed 's/Current `best//g' | sed \"s/' version is //g\" | sed 's/jre.*/jre/g'" 
+  register: jre_path
+
+- debug:
+    msg: "Found JRE: `{{ jre_path.stdout }}`"
+
+- set_fact: java_home="{{ jre_path.stdout }}"
