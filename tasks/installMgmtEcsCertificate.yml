@@ -1,9 +1,14 @@
 ---
 
-- name: Download ECS Management SSL Certificat
+- name: list ecs_hosts
+  set_fact:
+    mgmt_host: "{{ ecs_hosts.split(',') }}"
+
+- name: Download ECS Management SSL Certificate from first ECS hosts
   become: yes
-  shell: "echo -n | openssl s_client -connect {{ ecs_hosts }}:4443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/ecs-mgmt.crt"
+  shell: "echo -n | openssl s_client -connect {{ mgmt_host[0] }}:{{ ecs_mgmt_port }} | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/ecs-mgmt.crt"
   register: certificate_download
+  when: mgmt_host[0] is defined
 
 - name: Check if ECS Management SSL Certificate is already present
   become: yes
@@ -16,7 +21,6 @@
   shell: "{{ java_home }}/bin/keytool -delete -keystore {{ java_home }}/lib/security/cacerts -storepass changeit -alias ecs-mgmt"
   register: certificate_removed
   when: ( certificate_installed.rc == 0 )
-  #failed_when: no
 
 
 - name: Install Downloaded ECS Management SSL Certificate

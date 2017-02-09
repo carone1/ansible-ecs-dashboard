@@ -9,6 +9,6 @@ ecs_hosts: '10.1.83.51'
 ecs_mgmt_access_key: 'eric-caron-admin'
 ecs_mgmt_secret_key: 'Nord99sud'
 ecs_mgmt_port: 4443
-elastic_hosts: 'localhost'
+elastic_hosts: '10.10.132.222,10.10.132.223,10.10.132.224'
 elastic_port: 9300
 elastic_cluster_name: 'ecs-analytics'
