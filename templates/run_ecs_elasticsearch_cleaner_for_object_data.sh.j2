@@ -1,0 +1,6 @@
+#!/bin/bash
+
+JAVA_HOME={{ java_home }}
+
+{{ ecs_dashboard_install_dir }}/ecs-elasticsearch-cleaner-{{ ecs_dashboard_bin_version }}/bin/ecs-elasticsearch-cleaner --elastic-hosts {{ elastic_hosts }} --elastic-port {{ elastic_port }} --elastic-cluster {{ elastic_cluster_name }} --collection-days-to-keep {{ collection_days_to_keep }} --clean-data object
+

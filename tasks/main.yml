@@ -52,7 +52,13 @@
   tags:
     - ecs-dashboard
 
-- name: Install Dashboard MetaData Collector
-  include: installCollector.yml
+#- name: Install Dashboard MetaData Collector
+#  include: installCollector.yml
+#  tags:
+#    - ecs-dashboard
+
+- name: Install Dashboard Elasticsearch Cleaner
+  include: installCleaner.yml
   tags:
     - ecs-dashboard
+

@@ -2,7 +2,7 @@
 # vars file for ecs_dashboard
 
 ecs_dashboard_collector_url: https://github.com/carone1/ecs-dashboard/releases/download/{{ ecs_dashboard_url_version }}/ecs-metadata-collector-{{ ecs_dashboard_bin_version }}.zip
-ecs_dashboard_cleaner_url: https://github.com/carone1/ecs-dashboard/releases/download/{{ ecs_dashboard_url_version }}/ecs-elasticsearch-coleaner-{{ ecs_dashboard_bin_version }}.zip
+ecs_dashboard_cleaner_url: https://github.com/carone1/ecs-dashboard/releases/download/{{ ecs_dashboard_url_version }}/ecs-elasticsearch-cleaner-{{ ecs_dashboard_bin_version }}.zip
 ecs_dashboard_emailer_url: https://github.com/carone1/ecs-dashboard/releases/download/{{ ecs_dashboard_url_version }}/kibana-emailer-{{ ecs_dashboard_bin_version }}.zip
 ecs_dashboard_kibana_searches_url: https://github.com/carone1/ecs-dashboard/releases/download/{{ ecs_dashboard_url_version }}/kibana-searches-{{ ecs_dashboard_bin_version }}.json
 ecs_dashboard_kibana_visualizations_url: https://github.com/carone1/ecs-dashboard/releases/download/{{ ecs_dashboard_url_version }}/kibana-visualization-{{ ecs_dashboard_bin_version }}.json
