@@ -1,0 +1,146 @@
+---
+# tasks file for collector 
+
+- name: Include distribution specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
+  tags:
+    - ecs-dashboard
+
+- name: Check ECS ElasticSearch cleaner already installed
+  stat:
+    path: "{{ ecs_dashboard_install_dir }}/ecs-elasticsearch-cleaner-{{ ecs_dashboard_bin_version}}"
+  register: cleaner_version_installed
+  changed_when: false
+  tags:
+    - ecs-dashboard
+
+- name: Check ECS ElasticSearch Cleaner is already downloaded 
+  stat:
+    path: "{{ ecs_dashboard_download_dir }}/ecs-elasticsearch-cleaner-{{ ecs_dashboard_bin_version}}.zip"
+  register: cleaner_version_downloaded
+  changed_when: false
+  tags:
+    - ecs-dashboard
+
+- name: Create Cleaner download directory
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_download_dir }}"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: 0755
+    state: directory
+  tags:
+    - ecs-dashboard
+
+
+- name: Download collector
+  become: yes
+  get_url:
+    url: "{{ ecs_dashboard_cleaner_url }}"
+    dest: "{{ ecs_dashboard_download_dir }}/ecs-elasticsearch-cleaner-{{ ecs_dashboard_bin_version}}.zip"
+  when: cleaner_version_downloaded.stat.exists == False
+  tags:
+    - ecs-dashboard
+
+- name: Create Cleaner install directory
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_install_dir }}"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: 0755
+    state: directory
+  tags:
+    - ecs-dashboard
+
+
+- name: Unzip Dashboard cleaner into installation directory
+  become: yes
+  unarchive:
+    src: "{{ ecs_dashboard_download_dir }}/ecs-elasticsearch-cleaner-{{ ecs_dashboard_bin_version }}.zip"
+    dest: "{{ ecs_dashboard_install_dir }}"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    remote_src: yes
+  tags:
+    - ecs-dashboard
+
+- name: Create Cleaner configuration directory
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_config_dir }}"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}" 
+    mode: 0755
+    state: directory
+  tags:
+    - ecs-dashboard
+
+- name: Create run_ecs_elasticsearch_cleaner_for_all_data.sh file
+  become: yes
+  template:
+    src: "run_ecs_elasticsearch_cleaner_for_all_data.sh.j2"
+    dest: "{{ ecs_dashboard_install_dir }}/run_ecs_elasticsearch_cleaner_for_all_data.sh"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - ecs-dashboard
+
+- name: Create run_ecs_elasticsearch_cleaner_for_billing_data.sh file
+  become: yes
+  template:
+    src: "run_ecs_elasticsearch_cleaner_for_billing_data.sh.j2"
+    dest: "{{ ecs_dashboard_install_dir }}/run_ecs_elasticsearch_cleaner_for_billing_data.sh"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - ecs-dashboard
+
+- name: Create run_ecs_elasticsearch_cleaner_for_object_data.sh file
+  become: yes
+  template:
+    src: "run_ecs_elasticsearch_cleaner_for_object_data.sh.j2"
+    dest: "{{ ecs_dashboard_install_dir }}/run_ecs_elasticsearch_cleaner_for_object_data.sh"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - ecs-dashboard
+
+- name: Create run_ecs_elasticsearch_cleaner_for_object_version_data.sh file
+  become: yes
+  template:
+    src: "run_ecs_elasticsearch_cleaner_for_object_version_data.sh.j2"
+    dest: "{{ ecs_dashboard_install_dir }}/run_ecs_elasticsearch_cleaner_for_object_version_data.sh"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - ecs-dashboard
+
+
+- name: Create Cleaner log directory
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_log_dir }}/ecs-es-cleaner-logs"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rwx,o=rwx"
+    state: directory
+  tags:
+    - ecs-dashboard
+
+- name: Create logback.xml file for cleaner
+  become: yes
+  template:
+    src: "cleaner_logback.xml.j2"
+    dest: "{{ ecs_dashboard_install_dir }}/ecs-elasticsearch-cleaner-{{ ecs_dashboard_bin_version }}/config/logback.xml"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - ecs-dashboard
+

@@ -57,8 +57,13 @@
 #  tags:
 #    - ecs-dashboard
 
-- name: Install Dashboard Elasticsearch Cleaner
-  include: installCleaner.yml
+#- name: Install Dashboard Elasticsearch Cleaner
+#  include: installCleaner.yml
+#  tags:
+#    - ecs-dashboard
+
+- name: Install ChromeDriver 
+  include: installChromeDriver.yml
   tags:
     - ecs-dashboard
 
