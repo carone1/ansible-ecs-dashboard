@@ -17,8 +17,8 @@ ecs_mgmt_port: 4443
 # multiple hosts ip must comma seperated
 elastic_hosts: 'localhost'
 
-# port to use to communicate with elasticsearch cluster
-# this is the transport port
+# port to use to communicate with elasticsearch
+# cluster this is the transport port
 elastic_port: 9300
 
 # elasticsearch cluster name
@@ -27,3 +27,54 @@ elastic_cluster_name: 'ecs-analytics'
 # specify how many days worth of data
 # cleaner will keep in elastcisearch
 collection_days_to_keep: 7
+
+
+## Emailer settings
+
+kibana_urls:
+ - name: "Top 100 Dashboard"
+   url: "http://kibana_username:kibana_password@url_to_kibana_dashboard"
+ - name: "Top 10 Dashboard"
+   url: "http://kibana_username:kibana_password@url_to_kibana_dashboard_2"
+
+
+# chrome driver location
+chrome_driver: "{{ ecs_dashboard_install_dir }}/chromedriver{{ chrome_driver_bin_version }}"
+
+# chrome browser location
+chrome_browser: "some location"
+
+# delay before taking screen capture in seconds
+screen_capture_delay: 20
+
+# path where Kibana screen captures are saved
+screen_capture_destination_path: "{{ ecs_dashboard_install_dir }}/kibana-screen-captures"
+
+smtp_host: "localhost"
+smtp_port: 587
+
+smtp_username: "user"
+smtp_password: "password"
+
+# Specify tls or ssl. Default to tls
+smtp_security: "tls"
+
+# source host
+smtp_source_host: "localhost"
+
+# e-mail address
+smtp_source_address: "from-email@gmail.com"
+
+smtp_destination_addresses:
+ - "destination1@gmail.com"
+ - "destination2@gmail.com"
+
+# e-mail content
+# mail.title
+smtp_mail_title: "Kibana Reports"
+
+# mail.body
+smtp_mail_body: "Kibana Body"
+
+# certificate
+smtp_certificate_file: "/tmp/mail.crt"

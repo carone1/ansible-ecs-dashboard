@@ -1,0 +1,6 @@
+
+#!/bin/bash
+
+JAVA_HOME={{ java_home }}
+
+{{ ecs_dashboard_install_dir }}/kibana-emailer-{{ ecs_dashboard_bin_version }}/bin/kibana-emailer --config-file {{ ecs_dashboard_install_dir }}/kibana-emailer-{{ ecs_dashboard_bin_version }}/config/kibana-emailer.yml 

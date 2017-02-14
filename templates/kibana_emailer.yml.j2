@@ -1,0 +1,52 @@
+# Config file for kibana emailer
+
+#{{ kibana_urls }}
+
+kibana_urls:
+{% for url in kibana_urls %}
+  - name: "{{ url.name }}"
+    url: "{{ url.url }}"
+{% endfor %}
+
+# chrome driver location
+chrome.driver: "{{ chrome_driver }}"
+
+# chrome browser location
+chrome.browser: "{{ chrome_browser }}"
+
+# delay before taking screen capture in seconds
+screen.capture.delay: {{ screen_capture_delay }}
+
+# path where Kibana screen captures are saved
+destination.path: "{{ screen_capture_destination_path }}"
+
+# email section 
+# smtp
+
+smtp.host: "{{ smtp_host }}"
+smtp.port: {{ smtp_port }}
+
+smtp.username: "{{ smtp_username }}"
+smtp.password: "{{ smtp_password }}"
+
+# Specify tls or ssl. Default to tls
+smtp.security: "{{ smtp_security }}"
+
+# source host
+source.host: "{{ smtp_source_host }}"
+
+# e-mail address
+source.address: "{{ smtp_source_address }}"
+
+destination.addresses:
+{% for address in smtp_destination_addresses %}
+  - "{{ address }}"
+{% endfor %}
+
+# e-mail content
+# mail.title
+mail.title: "{{ smtp_mail_title }}"
+
+# mail.body
+mail.body: "{{ smtp_mail_title }}"
+

@@ -52,18 +52,22 @@
   tags:
     - ecs-dashboard
 
-#- name: Install Dashboard MetaData Collector
-#  include: installCollector.yml
-#  tags:
-#    - ecs-dashboard
+- name: Install Dashboard MetaData Collector
+  include: installCollector.yml
+  tags:
+    - ecs-dashboard
 
-#- name: Install Dashboard Elasticsearch Cleaner
-#  include: installCleaner.yml
-#  tags:
-#    - ecs-dashboard
+- name: Install Dashboard Elasticsearch Cleaner
+  include: installCleaner.yml
+  tags:
+    - ecs-dashboard
 
 - name: Install ChromeDriver 
   include: installChromeDriver.yml
   tags:
     - ecs-dashboard
 
+- name: Install Kibana Emailer
+  include: installEmailer.yml
+  tags: 
+    - ecs-dashboard

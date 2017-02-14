@@ -34,11 +34,11 @@
     - ecs-dashboard
 
 
-- name: Download collector
+- name: Download cleaner 
   become: yes
   get_url:
     url: "{{ ecs_dashboard_cleaner_url }}"
-    dest: "{{ ecs_dashboard_download_dir }}/ecs-elasticsearch-cleaner-{{ ecs_dashboard_bin_version}}.zip"
+    dest: "{{ ecs_dashboard_download_dir }}/ecs-elasticsearch-cleaner-{{ ecs_dashboard_bin_version }}.zip"
   when: cleaner_version_downloaded.stat.exists == False
   tags:
     - ecs-dashboard

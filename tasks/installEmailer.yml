@@ -1,0 +1,123 @@
+---
+# tasks file for emailer 
+
+- name: Include distribution specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
+  tags:
+    - ecs-dashboard
+
+- name: Check if ECS Dashboard Emailer already installed
+  stat:
+    path: "{{ ecs_dashboard_install_dir }}/kibana-emailer-{{ ecs_dashboard_bin_version }}"
+  register: emailer_version_installed
+  changed_when: false
+  tags:
+    - ecs-dashboard
+
+- name: Check if ECS Dashboard Emailer is already downloaded 
+  stat:
+    path: "{{ ecs_dashboard_download_dir }}/kibana-emailer-{{ ecs_dashboard_bin_version }}.zip"
+  register: emailer_version_downloaded
+  changed_when: false
+  tags:
+    - ecs-dashboard
+
+- name: Create Emailer download directory
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_download_dir }}"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: 0755
+    state: directory
+  tags:
+    - ecs-dashboard
+
+
+- name: Download Emailer
+  become: yes
+  get_url:
+    url: "{{ ecs_dashboard_emailer_url }}"
+    dest: "{{ ecs_dashboard_download_dir }}/kibana-emailer-{{ ecs_dashboard_bin_version }}.zip"
+  #when: emailer_version_downloaded.stat.exists == False
+  tags:
+    - ecs-dashboard
+
+- name: Create Emailer install directory
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_install_dir }}"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: 0755
+    state: directory
+  tags:
+    - ecs-dashboard
+
+
+- name: Unzip Dashboard Emailer to installation directory
+  become: yes
+  unarchive:
+    src: "{{ ecs_dashboard_download_dir }}/kibana-emailer-{{ ecs_dashboard_bin_version }}.zip"
+    dest: "{{ ecs_dashboard_install_dir }}"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    remote_src: yes
+  tags:
+    - ecs-dashboard
+
+- name: Create Emailer configuration directory
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_config_dir }}"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}" 
+    mode: 0755
+    state: directory
+  tags:
+    - ecs-dashboard
+
+- name: Create run_kibana_emailer.sh file
+  become: yes
+  template:
+    src: "run_kibana_emailer.sh.j2"
+    dest: "{{ ecs_dashboard_install_dir }}/run_kibana_emailer.sh"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - ecs-dashboard
+
+- name: Create kibana_emailer.yml file for emailer
+  become: yes
+  template:
+    src: "kibana_emailer.yml.j2"
+    dest: "{{ ecs_dashboard_install_dir }}/kibana-emailer-{{ ecs_dashboard_bin_version }}/config/kibana-emailer.yml"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - ecs-dashboard
+
+- name: Create Emailer log directory
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_log_dir }}/kibana-emailer-logs"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rwx,o=rwx"
+    state: directory
+  tags:
+    - ecs-dashboard
+
+- name: Create logback.xml file for emailer
+  become: yes
+  template:
+    src: "emailer_logback.yml.j2"
+    dest: "{{ ecs_dashboard_install_dir }}/kibana-emailer-{{ ecs_dashboard_bin_version }}/config/logback.xml"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - ecs-dashboard
+
