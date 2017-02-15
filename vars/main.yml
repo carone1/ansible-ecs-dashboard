@@ -16,4 +16,7 @@ ecs_dashboard_config_dir: /etc/ecs-dashboard
 ecs_dashboard_user: ecs-dashboard
 ecs_dashboard_group: ecs-dashboard
 
+# chrome driver location
+chrome_driver: "{{ ecs_dashboard_install_dir }}/chromedriver-{{ chrome_driver_bin_version }}/chromedriver"
+
 update_java: true

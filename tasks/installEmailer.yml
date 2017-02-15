@@ -4,7 +4,7 @@
 - name: Include distribution specific variables
   include_vars: "{{ ansible_distribution }}.yml"
   tags:
-    - ecs-dashboard
+    - emailer
 
 - name: Check if ECS Dashboard Emailer already installed
   stat:
@@ -12,7 +12,16 @@
   register: emailer_version_installed
   changed_when: false
   tags:
-    - ecs-dashboard
+    - emailer
+
+- name: Remove already installed ECS Dashboard Emailer
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_install_dir }}/kibana-emailer-{{ ecs_dashboard_bin_version }}.zip"
+    state: absent
+  changed_when: emailer_version_installed.stat.exists == true
+  tags:
+    - emailer
 
 - name: Check if ECS Dashboard Emailer is already downloaded 
   stat:
@@ -20,7 +29,17 @@
   register: emailer_version_downloaded
   changed_when: false
   tags:
-    - ecs-dashboard
+    - emailer
+
+- name: Remove already downloaded ECS Dashboard Emailer
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_download_dir }}/kibana-emailer-{{ ecs_dashboard_bin_version }}.zip"
+    state: absent
+  changed_when: emailer_version_downloaded.stat.exists == true
+  tags:
+    - emailer
+
 
 - name: Create Emailer download directory
   become: yes
@@ -31,7 +50,7 @@
     mode: 0755
     state: directory
   tags:
-    - ecs-dashboard
+    - emailer
 
 
 - name: Download Emailer
@@ -41,7 +60,7 @@
     dest: "{{ ecs_dashboard_download_dir }}/kibana-emailer-{{ ecs_dashboard_bin_version }}.zip"
   #when: emailer_version_downloaded.stat.exists == False
   tags:
-    - ecs-dashboard
+    - emailer
 
 - name: Create Emailer install directory
   become: yes
@@ -52,7 +71,7 @@
     mode: 0755
     state: directory
   tags:
-    - ecs-dashboard
+    - emailer
 
 
 - name: Unzip Dashboard Emailer to installation directory
@@ -64,7 +83,7 @@
     group: "{{ ecs_dashboard_group }}"
     remote_src: yes
   tags:
-    - ecs-dashboard
+    - emailer
 
 - name: Create Emailer configuration directory
   become: yes
@@ -75,7 +94,7 @@
     mode: 0755
     state: directory
   tags:
-    - ecs-dashboard
+    - emailer
 
 - name: Create run_kibana_emailer.sh file
   become: yes
@@ -86,7 +105,7 @@
     group: "{{ ecs_dashboard_group }}"
     mode: "u=rwx,g=rx,o=rx"
   tags:
-    - ecs-dashboard
+    - emailer
 
 - name: Create kibana_emailer.yml file for emailer
   become: yes
@@ -97,7 +116,7 @@
     group: "{{ ecs_dashboard_group }}"
     mode: "u=rwx,g=rx,o=rx"
   tags:
-    - ecs-dashboard
+    - emailer
 
 - name: Create Emailer log directory
   become: yes
@@ -108,7 +127,7 @@
     mode: "u=rwx,g=rwx,o=rwx"
     state: directory
   tags:
-    - ecs-dashboard
+    - emailer
 
 - name: Create logback.xml file for emailer
   become: yes
@@ -119,5 +138,16 @@
     group: "{{ ecs_dashboard_group }}"
     mode: "u=rwx,g=rx,o=rx"
   tags:
-    - ecs-dashboard
+    - emailer
+
+- name: Create Screen capture directory
+  become: yes
+  file:
+    path: "{{ screen_capture_destination_path }}"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rwx,o=rwx"
+    state: directory
+  tags:
+    - emailer
 

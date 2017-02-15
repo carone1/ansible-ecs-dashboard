@@ -1,0 +1,49 @@
+---
+
+- name: Check if SMTP Server Certificate is already downloaded
+  stat:
+    path: "/tmp/smtp-server.crt"
+  register: smtp_server_certificate_downloaded
+  changed_when: false
+  tags:
+    - emailer
+
+- name: Remove already downloaded SMTP Server Certificate 
+  become: yes
+  file:
+    path: "/tmp/smtp-server.crt"
+    state: absent
+  changed_when: smtp_server_certificate_downloaded.stat.exists == true
+  tags:
+    - emailer
+
+- name: Download SSL Certificate from SMTP Server 
+  become: yes
+  shell: "echo -n | openssl s_client -connect {{ smtp_host }}:{{ smtp_ssl_port }} | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/smtp-server.crt"
+  register: certificate_download
+  when: smtp_host is defined
+  tags:
+    - emailer
+
+- name: Check if SMTP Server SSL Certificate is already present
+  become: yes
+  shell: "{{ java_home }}/bin/keytool -list -keystore {{ java_home }}/lib/security/cacerts -storepass changeit -alias smtp-server"
+  register: certificate_installed
+  failed_when: no
+  tags:
+    - emailer
+
+- name: Remove already installed SMTP Server SSL Certificate
+  become: yes
+  shell: "{{ java_home }}/bin/keytool -delete -keystore {{ java_home }}/lib/security/cacerts -storepass changeit -alias smtp-server"
+  register: certificate_removed
+  when: ( certificate_installed.rc == 0 )
+  tags:
+    - emailer
+
+- name: Install Downloaded SMTP Server SSL Certificate
+  become: yes
+  shell: "{{ java_home }}/bin/keytool -importcert  -keystore {{ java_home }}/lib/security/cacerts -storepass changeit -file /tmp/smtp-server.crt -alias smtp-server -noprompt"
+  when: ( (certificate_installed.rc != 0) or (certificate_removed.rc == 0))
+  tags:
+    - emailer

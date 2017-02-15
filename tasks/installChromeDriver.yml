@@ -1,5 +1,5 @@
 ---
-# tasks file for collector 
+# tasks file for chrome driver 
 
 - name: Include distribution specific variables
   include_vars: "{{ ansible_distribution }}.yml"
@@ -8,11 +8,20 @@
 
 - name: Check if Chrome driver already installed
   stat:
-    path: "{{ ecs_dashboard_install_dir }}/chromedriver-{{ chrome_driver_url_version }}"
+    path: "{{ ecs_dashboard_install_dir }}/chromedriver-{{ chrome_driver_bin_version }}"
   register: chrome_driver_version_installed
   changed_when: false
   tags:
-    - ecs-dashboard
+    - emailer
+
+- name: Remove already installed ChromeDriver 
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_install_dir }}/chromedriver-{{ chrome_driver_bin_version }}.zip"
+    state: absent
+  changed_when: chrome_driver_version_installed.stat.exists == true
+  tags:
+    - emailer
 
 - name: Check if Chromer driver is already downloaded 
   stat:
@@ -20,7 +29,16 @@
   register: chrome_driver_version_downloaded
   changed_when: false
   tags:
-    - ecs-dashboard
+    - emailer
+
+- name: Remove already downloaded ChromeDriver
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_download_dir }}/chromedriver-{{ chrome_driver_bin_version }}.zip"
+    state: absent
+  changed_when: chrome_driver_version_downloaded.stat.exists == true
+  tags:
+    - emailer
 
 - name: Create Chrome driver download directory
   become: yes
@@ -31,10 +49,7 @@
     mode: 0755
     state: directory
   tags:
-    - ecs-dashboard
-
-- debug:
-    msg: "Chrome driver URL {{ chrome_driver_url }}"
+    - emailer
 
 - name: Download Chrome Driver 
   become: yes
@@ -43,7 +58,7 @@
     dest: "{{ ecs_dashboard_download_dir }}/chromedriver_linux64.zip"
   #when: chrome_driver_version_downloaded.stat.exists == False
   tags:
-    - ecs-dashboard
+    - emailer
 
 - name: Create Collector install directory
   become: yes
@@ -54,10 +69,9 @@
     mode: 0755
     state: directory
   tags:
-    - ecs-dashboard
+    - emailer
 
-
-- name: Unzip Dashboard collector to installation directory
+- name: Unzip home Driver into installation directory
   become: yes
   unarchive:
     src: "{{ ecs_dashboard_download_dir }}/chromedriver_linux64.zip"
@@ -66,5 +80,16 @@
     group: "{{ ecs_dashboard_group }}"
     remote_src: yes
   tags:
-    - ecs-dashboard
+    - emailer
+
+- name: Update ChromeDriver permissions 
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_install_dir }}/chromedriver-{{ chrome_driver_bin_version }}/chromedriver"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: 0755
+    state: file 
+  tags:
+    - emailer
 

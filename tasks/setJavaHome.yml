@@ -4,8 +4,14 @@
   become: yes 
   shell: "update-alternatives --display java | grep best | sed 's/Current `best//g' | sed \"s/' version is //g\" | sed 's/jre.*/jre/g'" 
   register: jre_path
+  tags:
+    - ecs-dashboard
 
 - debug:
-    msg: "Found JRE: `{{ jre_path.stdout }}`"
+    msg: "Selected JRE: `{{ jre_path.stdout }}`"
+  tags:
+    - ecs-dashboard
 
 - set_fact: java_home="{{ jre_path.stdout }}"
+  tags:
+    - ecs-dashboard

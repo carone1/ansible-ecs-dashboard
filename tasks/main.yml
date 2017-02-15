@@ -50,24 +50,29 @@
 - name: Install ECS Management SSL Certificate
   include: installMgmtEcsCertificate.yml
   tags:
-    - ecs-dashboard
+    - collector 
 
 - name: Install Dashboard MetaData Collector
   include: installCollector.yml
   tags:
-    - ecs-dashboard
+    - collector
 
 - name: Install Dashboard Elasticsearch Cleaner
   include: installCleaner.yml
   tags:
-    - ecs-dashboard
+    - cleaner 
 
 - name: Install ChromeDriver 
   include: installChromeDriver.yml
   tags:
-    - ecs-dashboard
+    - emailer 
+
+- name: Install SMTP SSL Certificate
+  include: installSmtpCertificate.yml
+  tags:
+    - emailer 
 
 - name: Install Kibana Emailer
   include: installEmailer.yml
   tags: 
-    - ecs-dashboard
+    - emailer 

@@ -1,29 +1,55 @@
 ---
 
+- name: Check if Management ECS Certificate is already downloaded
+  stat:
+    path: "/tmp/ecs-mgmt.crt"
+  register: ecs_mgmt_certificate_downloaded
+  changed_when: false
+  tags:
+    - emailer
+
+- name: Remove already downloaded Management ECS Certificate
+  become: yes
+  file:
+    path: "/tmp/ecs-mgmt.crt"
+    state: absent
+  changed_when: ecs_mgmt_certificate_downloaded.stat.exists == true
+  tags:
+    - emailer
+
 - name: list ecs_hosts
   set_fact:
     mgmt_host: "{{ ecs_hosts.split(',') }}"
+  tags:
+    - collector
 
 - name: Download ECS Management SSL Certificate from first ECS hosts
   become: yes
   shell: "echo -n | openssl s_client -connect {{ mgmt_host[0] }}:{{ ecs_mgmt_port }} | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/ecs-mgmt.crt"
   register: certificate_download
   when: mgmt_host[0] is defined
+  tags:
+    - collector
 
 - name: Check if ECS Management SSL Certificate is already present
   become: yes
   shell: "{{ java_home }}/bin/keytool -list -keystore {{ java_home }}/lib/security/cacerts -storepass changeit -alias ecs-mgmt"
   register: certificate_installed
   failed_when: no
+  tags:
+    - collector
 
 - name: Remove already installed ECS Management SSL Certificate
   become: yes
   shell: "{{ java_home }}/bin/keytool -delete -keystore {{ java_home }}/lib/security/cacerts -storepass changeit -alias ecs-mgmt"
   register: certificate_removed
   when: ( certificate_installed.rc == 0 )
-
+  tags:
+    - collector
 
 - name: Install Downloaded ECS Management SSL Certificate
   become: yes
   shell: "{{ java_home }}/bin/keytool -importcert  -keystore {{ java_home }}/lib/security/cacerts -storepass changeit -file /tmp/ecs-mgmt.crt -alias ecs-mgmt -noprompt"
   when: ( (certificate_installed.rc != 0) or (certificate_removed.rc == 0))
+  tags:
+    - collector

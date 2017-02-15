@@ -1,8 +1,6 @@
 # Config file for kibana emailer
 
-#{{ kibana_urls }}
-
-kibana_urls:
+kibana.urls:
 {% for url in kibana_urls %}
   - name: "{{ url.name }}"
     url: "{{ url.url }}"

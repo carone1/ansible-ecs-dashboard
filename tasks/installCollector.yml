@@ -4,7 +4,7 @@
 - name: Include distribution specific variables
   include_vars: "{{ ansible_distribution }}.yml"
   tags:
-    - ecs-dashboard
+    - collector
 
 - name: Check if ECS Dashboard Collector already installed
   stat:
@@ -12,7 +12,16 @@
   register: collector_version_installed
   changed_when: false
   tags:
-    - ecs-dashboard
+    - collector
+
+- name: Remove already installed ECS Dashboard Collector 
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_install_dir }}/ecs-metadata-collector-{{ ecs_dashboard_bin_version }}.zip"
+    state: absent
+  changed_when: collector_version_installed.stat.exists == true
+  tags:
+    - emailer
 
 - name: Check if ECS Dashboard Collector is already downloaded 
   stat:
@@ -20,7 +29,16 @@
   register: collector_version_downloaded
   changed_when: false
   tags:
-    - ecs-dashboard
+    - collector
+
+- name: Remove already downloaded ECS Dashboard Collector 
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_download_dir }}/ecs-metadata-collector-{{ ecs_dashboard_bin_version }}.zip"
+    state: absent
+  changed_when: collector_version_downloaded.stat.exists == true
+  tags:
+    - emailer
 
 - name: Create Collector download directory
   become: yes
@@ -31,7 +49,7 @@
     mode: 0755
     state: directory
   tags:
-    - ecs-dashboard
+    - collector
 
 
 - name: Download collector
@@ -41,7 +59,7 @@
     dest: "{{ ecs_dashboard_download_dir }}//ecs-metadata-collector-{{ ecs_dashboard_bin_version}}.zip"
   when: collector_version_downloaded.stat.exists == False
   tags:
-    - ecs-dashboard
+    - collector
 
 - name: Create Collector install directory
   become: yes
@@ -52,7 +70,7 @@
     mode: 0755
     state: directory
   tags:
-    - ecs-dashboard
+    - collector
 
 
 - name: Unzip Dashboard collector to installation directory
@@ -64,7 +82,7 @@
     group: "{{ ecs_dashboard_group }}"
     remote_src: yes
   tags:
-    - ecs-dashboard
+    - collector
 
 - name: Create Collector configuration directory
   become: yes
@@ -75,7 +93,7 @@
     mode: 0755
     state: directory
   tags:
-    - ecs-dashboard
+    - collector
 
 - name: Create run_ecs_collector_for_all_data.sh file
   become: yes
@@ -86,7 +104,7 @@
     group: "{{ ecs_dashboard_group }}"
     mode: "u=rwx,g=rx,o=rx"
   tags:
-    - ecs-dashboard
+    - collector
 
 - name: Create run_ecs_collector_for_billing_data.sh file
   become: yes
@@ -97,7 +115,7 @@
     group: "{{ ecs_dashboard_group }}"
     mode: "u=rwx,g=rx,o=rx"
   tags:
-    - ecs-dashboard
+    - collector
 
 - name: Create run_ecs_collector_for_object_data.sh file
   become: yes
@@ -108,7 +126,7 @@
     group: "{{ ecs_dashboard_group }}"
     mode: "u=rwx,g=rx,o=rx"
   tags:
-    - ecs-dashboard
+    - collector
 
 - name: Create run_ecs_collector_for_object_version_data.sh file
   become: yes
@@ -119,7 +137,7 @@
     group: "{{ ecs_dashboard_group }}"
     mode: "u=rwx,g=rx,o=rx"
   tags:
-    - ecs-dashboard
+    - collector
 
 - name: Create run_ecs_collector_for_index_init.sh file
   become: yes
@@ -130,7 +148,7 @@
     group: "{{ ecs_dashboard_group }}"
     mode: "u=rwx,g=rx,o=rx"
   tags:
-    - ecs-dashboard
+    - collector
 
 - name: Create Collector log directory
   become: yes
@@ -141,7 +159,7 @@
     mode: "u=rwx,g=rwx,o=rwx"
     state: directory
   tags:
-    - ecs-dashboard
+    - collector
 
 - name: Create logback.xml file for collector
   become: yes
@@ -152,5 +170,5 @@
     group: "{{ ecs_dashboard_group }}"
     mode: "u=rwx,g=rx,o=rx"
   tags:
-    - ecs-dashboard
+    - collector
 
