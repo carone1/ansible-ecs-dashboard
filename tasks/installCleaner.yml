@@ -1,5 +1,5 @@
 ---
-# tasks file for collector 
+# tasks file for cleaner 
 
 - name: Include distribution specific variables
   include_vars: "{{ ansible_distribution }}.yml"
@@ -21,7 +21,7 @@
     state: absent
   changed_when: cleaner_version_installed.stat.exists == true
   tags:
-    - emailer
+    - cleaner 
 
 - name: Check if ECS Elasticsearch cleaner is already downloaded 
   stat:
@@ -38,8 +38,7 @@
     state: absent
   changed_when: cleaner_version_downloaded.stat.exists == true
   tags:
-    - emailer
-
+    - cleaner
 
 - name: Create Cleaner download directory
   become: yes
@@ -57,7 +56,6 @@
   get_url:
     url: "{{ ecs_dashboard_cleaner_url }}"
     dest: "{{ ecs_dashboard_download_dir }}/ecs-elasticsearch-cleaner-{{ ecs_dashboard_bin_version }}.zip"
-  when: cleaner_version_downloaded.stat.exists == False
   tags:
     - cleaner
 

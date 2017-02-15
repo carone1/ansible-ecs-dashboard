@@ -6,7 +6,7 @@
   register: ecs_mgmt_certificate_downloaded
   changed_when: false
   tags:
-    - emailer
+    - collector
 
 - name: Remove already downloaded Management ECS Certificate
   become: yes
@@ -15,7 +15,7 @@
     state: absent
   changed_when: ecs_mgmt_certificate_downloaded.stat.exists == true
   tags:
-    - emailer
+    - collector
 
 - name: list ecs_hosts
   set_fact:

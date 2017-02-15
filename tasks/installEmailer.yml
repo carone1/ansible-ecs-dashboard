@@ -58,7 +58,6 @@
   get_url:
     url: "{{ ecs_dashboard_emailer_url }}"
     dest: "{{ ecs_dashboard_download_dir }}/kibana-emailer-{{ ecs_dashboard_bin_version }}.zip"
-  #when: emailer_version_downloaded.stat.exists == False
   tags:
     - emailer
 

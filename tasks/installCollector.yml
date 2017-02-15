@@ -21,7 +21,7 @@
     state: absent
   changed_when: collector_version_installed.stat.exists == true
   tags:
-    - emailer
+    - collector 
 
 - name: Check if ECS Dashboard Collector is already downloaded 
   stat:
@@ -38,7 +38,7 @@
     state: absent
   changed_when: collector_version_downloaded.stat.exists == true
   tags:
-    - emailer
+    - collector
 
 - name: Create Collector download directory
   become: yes
@@ -57,7 +57,6 @@
   get_url:
     url: "{{ ecs_dashboard_collector_url }}"
     dest: "{{ ecs_dashboard_download_dir }}//ecs-metadata-collector-{{ ecs_dashboard_bin_version}}.zip"
-  when: collector_version_downloaded.stat.exists == False
   tags:
     - collector
 
@@ -169,6 +168,13 @@
     owner: "{{ ecs_dashboard_user }}"
     group: "{{ ecs_dashboard_group }}"
     mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - collector
+
+- name: Initialize Elasticsearch Indexes 
+  #become: yes
+  shell: "{{ ecs_dashboard_install_dir }}/run_ecs_collector_for_index_init.sh" 
+  register: index_initialized
   tags:
     - collector
 

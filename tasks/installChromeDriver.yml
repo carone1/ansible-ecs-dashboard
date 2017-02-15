@@ -56,7 +56,6 @@
   get_url:
     url: "{{ chrome_driver_url }}"
     dest: "{{ ecs_dashboard_download_dir }}/chromedriver_linux64.zip"
-  #when: chrome_driver_version_downloaded.stat.exists == False
   tags:
     - emailer
 
