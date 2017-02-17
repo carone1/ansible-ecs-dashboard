@@ -17,13 +17,22 @@
   tags:
     - emailer
 
-- name: Download SSL Certificate from SMTP Server 
+- name: "Download SSL Certificate from SMTP Server host: {{ smtp_host }} port: {{ smtp_ssl_port }}"
   become: yes
   shell: "echo -n | openssl s_client -connect {{ smtp_host }}:{{ smtp_ssl_port }} | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/smtp-server.crt"
   register: certificate_download
   when: smtp_host is defined
   tags:
     - emailer
+
+- name: Check if downloaded SMTP Server Certificate is present locally and not empty
+  stat:
+    path: "/tmp/smtp-server.crt"
+  register: smtp_server_certificate_stat
+  failed_when: ( (smtp_server_certificate_stat.stat.exists == false ) or (smtp_server_certificate_stat.stat.size == 0) )
+  tags:
+    - emailer
+
 
 - name: Check if SMTP Server SSL Certificate is already present
   become: yes

@@ -174,8 +174,19 @@
 - name: Initialize Elasticsearch Indexes 
   #become: yes
   shell: "{{ ecs_dashboard_install_dir }}/run_ecs_collector_for_index_init.sh" 
-  run_once: ture
+  run_once: true
   register: index_initialized
+  tags:
+    - collector
+
+- name: Remove any existing Collector log file
+  become: yes
+  file:
+    path: "{{ ecs_dashboard_log_dir }}/ecs-collector-logs/ecs-metadata-collector.log"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rwx,o=rwx"
+    state: absent
   tags:
     - collector
 

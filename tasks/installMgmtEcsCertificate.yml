@@ -23,11 +23,19 @@
   tags:
     - collector
 
-- name: Download ECS Management SSL Certificate from first ECS hosts
+- name: "Download ECS Management SSL Certificate from first ECS hosts {{ mgmt_host[0] }} port {{ ecs_mgmt_port }}"
   become: yes
   shell: "echo -n | openssl s_client -connect {{ mgmt_host[0] }}:{{ ecs_mgmt_port }} | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/ecs-mgmt.crt"
   register: certificate_download
   when: mgmt_host[0] is defined
+  tags:
+    - collector
+
+- name: Check if downloaded ECS Management SSSL Certificate is present locally and not empty
+  stat:
+    path: "/tmp/ecs-mgmt.crt"
+  register: ecs_server_certificate_stat
+  failed_when: ( (ecs_server_certificate_stat.stat.exists == false ) or (ecs_server_certificate_stat.stat.size == 0) )
   tags:
     - collector
 
