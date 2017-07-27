@@ -138,6 +138,50 @@
   tags:
     - collector
 
+- name: Create run_ecs_collector_for_namespace_detail_data.sh file
+  become: yes
+  template:
+    src: "run_ecs_collector_for_namespace_detail_data.sh.j2"
+    dest: "{{ ecs_dashboard_install_dir }}/run_ecs_collector_for_namespace_detail_data.sh"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - collector
+
+- name: Create run_ecs_collector_for_namespace_quota_data.sh file
+  become: yes
+  template:
+    src: "run_ecs_collector_for_namespace_quota_data.sh.j2"
+    dest: "{{ ecs_dashboard_install_dir }}/run_ecs_collector_for_namespace_quota_data.sh"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - collector
+
+- name: Create run_ecs_collector_for_vdc_data.sh file
+  become: yes
+  template:
+    src: "run_ecs_collector_for_vdc_data.sh.j2"
+    dest: "{{ ecs_dashboard_install_dir }}/run_ecs_collector_for_vdc_data.sh"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - collector
+
+- name: Create run_ecs_collector_for_bucket_owner_data.sh file
+  become: yes
+  template:
+    src: "run_ecs_collector_for_bucket_owner_data.sh.j2"
+    dest: "{{ ecs_dashboard_install_dir }}/run_ecs_collector_for_bucket_owner_data.sh"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - collector
+    
 - name: Create run_ecs_collector_for_index_init.sh file
   become: yes
   template:
