@@ -42,7 +42,7 @@ kibana_urls:
 chrome_browser: "/bin/google-chrome"
 
 # delay before taking screen capture in seconds
-screen_capture_delay: 15 
+screen_capture_delay: 15
 
 # path where Kibana screen captures are saved
 screen_capture_destination_path: "{{ ecs_dashboard_install_dir }}/kibana-screen-captures"
@@ -75,4 +75,3 @@ smtp_mail_body: "Kibana Body"
 
 # certificate
 smtp_ssl_port: 443
-

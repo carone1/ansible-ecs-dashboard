@@ -14,7 +14,7 @@
 - include: Ubuntu.yml
   when: ansible_distribution == "Ubuntu"
   tags:
-    - ecs-dashboard 
+    - ecs-dashboard
 
 - name: Create ECS Dashboard group
   become: yes
@@ -50,7 +50,7 @@
 - name: Install ECS Management SSL Certificate
   include: installMgmtEcsCertificate.yml
   tags:
-    - collector 
+    - collector
 
 - name: Install Dashboard MetaData Collector
   include: installCollector.yml
@@ -60,19 +60,19 @@
 - name: Install Dashboard Elasticsearch Cleaner
   include: installCleaner.yml
   tags:
-    - cleaner 
+    - cleaner
 
-- name: Install ChromeDriver 
+- name: Install ChromeDriver
   include: installChromeDriver.yml
   tags:
-    - emailer 
+    - emailer
 
 - name: Install SMTP SSL Certificate
   include: installSmtpCertificate.yml
   tags:
-    - emailer 
+    - emailer
 
 - name: Install Kibana Emailer
   include: installEmailer.yml
-  tags: 
-    - emailer 
+  tags:
+    - emailer

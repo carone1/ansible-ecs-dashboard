@@ -2,4 +2,4 @@
 
 JAVA_HOME={{ java_home }}
 
-{{ ecs_dashboard_install_dir }}/ecs-metadata-collector-{{ ecs_dashboard_bin_version }}/bin/ecs-metadata-collector --ecs-hosts {{ ecs_hosts }} --ecs-mgmt-access-key {{ ecs_mgmt_access_key }} --ecs-mgmt-secret-key {{ ecs_mgmt_secret_key }} --ecs-mgmt-port {{ ecs_mgmt_port }} --elastic-hosts {{ elastic_hosts }} --elastic-port {{ elastic_port }} --elastic-cluster {{ elastic_cluster_name }} --collect-data vdc
+{{ ecs_dashboard_install_dir }}/ecs-metadata-collector-{{ ecs_dashboard_bin_version }}/bin/ecs-metadata-collector --ecs-hosts {{ ecs_hosts }} --ecs-mgmt-access-key {{ ecs_mgmt_access_key }} --ecs-mgmt-secret-key {{ ecs_mgmt_secret_key }} --ecs-mgmt-port {{ ecs_mgmt_port }} --elastic-hosts {{ elastic_hosts }} --elastic-port {{ elastic_port }} --elastic-cluster {{ elastic_cluster_name }} --collect-data vdc --xpack-user {{xpack_user}} --xpack-pwd {{xpack_pwd}} --xpack-key {{xpack_ssl_key}} --xpack-cert {{xpack_ssl_certificate}} --xpack--cert-ca {{xpack_ca_certificate}}
