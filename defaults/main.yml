@@ -75,3 +75,10 @@ smtp_mail_body: "Kibana Body"
 
 # certificate
 smtp_ssl_port: 443
+
+# x-pack authentication
+xpack_user: "elastic"
+xpack_pwd: "changeme"
+xpack_ssl_key: "/etc/elasticsearch/es1/node01.key"
+xpack_ssl_certificate: "/etc/elasticsearch/es1/node01.crt"
+xpack_ca_certificate: "/etc/elasticsearch/es1/ca.crt"

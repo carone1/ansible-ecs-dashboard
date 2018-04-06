@@ -20,8 +20,3 @@ ecs_dashboard_group: ecs-dashboard
 chrome_driver: "{{ ecs_dashboard_install_dir }}/chromedriver-{{ chrome_driver_bin_version }}/chromedriver"
 
 update_java: true
-
-# x-pack certificates
-xpack_ssl_key: ""
-xpack_ssl_certificate: ""
-xpack_ca_certificate: ""
