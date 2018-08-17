@@ -127,6 +127,28 @@
   tags:
     - collector
 
+- name: Create run_ecs_collector_for_object_data_namespace.sh file
+  become: yes
+  template:
+    src: "run_ecs_collector_for_object_data_namespace.sh.j2"
+    dest: "{{ ecs_dashboard_install_dir }}/run_ecs_collector_for_object_data_namespace.sh"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - collector
+
+- name: Create run_ecs_collector_for_object_data_bucket.sh file
+  become: yes
+  template:
+    src: "run_ecs_collector_for_object_data_bucket.sh.j2"
+    dest: "{{ ecs_dashboard_install_dir }}/run_ecs_collector_for_object_data_bucket.sh"
+    owner: "{{ ecs_dashboard_user }}"
+    group: "{{ ecs_dashboard_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - collector
+        
 - name: Create run_ecs_collector_for_object_version_data.sh file
   become: yes
   template:
