@@ -2,8 +2,8 @@
 
 # default file for ecs dashboard
 
-ecs_dashboard_bin_version: 1.5
-ecs_dashboard_url_version: 'v1.5'
+ecs_dashboard_bin_version: 1.5.1
+ecs_dashboard_url_version: 'v1.5.1'
 
 chrome_driver_url_version: '2.27'
 chrome_driver_bin_version: '2.27'
@@ -12,6 +12,7 @@ ecs_hosts: 'specify-host'
 ecs_mgmt_access_key: 'specify-user-key'
 ecs_mgmt_secret_key: 'specify-user-secret'
 ecs_mgmt_port: 4443
+ecs_alt_mgmt_port: 9101
 
 # ip or hosts for elasticsearch cluster
 # multiple hosts ip must comma seperated
